@@ -1,0 +1,7 @@
+[0m[[0m[31merror[0m] [0m[0m/home/lain/document/test/samplesbt/src/main/scala/bangyan.scala:12:22: not found: type ChiselEnum[0m
+[0m[[0m[31merror[0m] [0m[0mclass MyEnum extends ChiselEnum {[0m
+[0m[[0m[31merror[0m] [0m[0m                     ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/lain/document/test/samplesbt/src/main/scala/bangyan.scala:13:17: not found: value Value[0m
+[0m[[0m[31merror[0m] [0m[0m  val a, b, c = Value[0m
+[0m[[0m[31merror[0m] [0m[0m                ^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m

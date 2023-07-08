@@ -1,0 +1,9 @@
+*.txt
+*.scalafmt.conf
+
+.bloop
+.bsp
+.metals
+.vscode
+
+test_run_dir

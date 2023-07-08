@@ -1,0 +1,19 @@
+[0m[[0m[0mdebug[0m] [0m[0mPackaging /home/lain/document/test/samplesbt/target/scala-2.13/mytest_2.13-0.1.0-SNAPSHOT.jar ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MyRoutingArbiter.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/lain/document/test/samplesbt/target/scala-2.13/classes/MyRoutingArbiter.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MyRoutingArbiter$$anon$2.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/lain/document/test/samplesbt/target/scala-2.13/classes/MyRoutingArbiter$$anon$2.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Op$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/lain/document/test/samplesbt/target/scala-2.13/classes/Op$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	HashTable.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/lain/document/test/samplesbt/target/scala-2.13/classes/HashTable.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	HashTable$$anon$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/lain/document/test/samplesbt/target/scala-2.13/classes/HashTable$$anon$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Main.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/lain/document/test/samplesbt/target/scala-2.13/classes/Main.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Op.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/lain/document/test/samplesbt/target/scala-2.13/classes/Op.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Main$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/lain/document/test/samplesbt/target/scala-2.13/classes/Main$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone packaging.[0m

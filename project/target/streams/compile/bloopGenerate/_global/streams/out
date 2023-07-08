@@ -1,0 +1,4 @@
+[0m[[0m[0mdebug[0m] [0m[0m[samplesbt-build] Classpath dependencies List()[0m
+[0m[[0m[0mdebug[0m] [0m[0m[samplesbt-build] Dependencies from configurations List()[0m
+[0m[[0m[0mdebug[0m] [0m[0mBloop wrote the configuration of project 'samplesbt-build' to '/home/lain/document/test/samplesbt/project/.bloop/samplesbt-build.json'[0m
+[0m[[0m[32msuccess[0m] [0m[0mGenerated .bloop/samplesbt-build.json[0m
