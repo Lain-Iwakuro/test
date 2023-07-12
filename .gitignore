@@ -7,3 +7,4 @@
 .vscode
 
 test_run_dir
+*.log

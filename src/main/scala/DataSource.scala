@@ -27,7 +27,7 @@ class DataSource(width: Int, data: Array[Int]) extends Module {
     outValidReg := true.B
     ptrReg := 1.U(log2Ceil(data.length + 1).W)
   }.otherwise {
-    outValidReg := io.in_en && ptrReg < data.length.U
+    outValidReg := io.in_en && (ptrReg < data.length.U || ~io.in_ready)
     when(io.in_en) {
       when(io.in_ready && ptrReg < data.length.U) {
         outBitsReg := dataRegs(ptrReg)
@@ -35,7 +35,7 @@ class DataSource(width: Int, data: Array[Int]) extends Module {
       }
       //printf(p"ptrReg = ${ptrReg}\n")
       //printf(p"dataRegs(ptrReg) = ${dataRegs(ptrReg)}\n")
-      printf(p"out_bits = ${io.out_bits}, out_valid = ${io.out_valid}\n")
+      printf(p"data out_bits = ${io.out_bits}, out_valid = ${io.out_valid}\n")
     }
   }
   
