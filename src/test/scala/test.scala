@@ -14,68 +14,152 @@ class TestSampleModule extends AnyFlatSpec with ChiselScalatestTester {
   }
 }
 */
-class TestHashTable extends AnyFlatSpec with ChiselScalatestTester {
-  "HashTable" should "work" in {
-    test(new HashTable(5, 32))
+class MyTest extends Module {
+  val io = IO(new Bundle {
+    val in_rst = Input(Bool())
+    val in_en = Input(Bool())
+  })
+  
+  val moduleA = Module(new DataSource(10, Array(9, 16, 17, 18, 73, 32, 5, 691, 7, 8, 64, 129, 128)))
+  val moduleB = Module(new HashTable(3, 10))
+
+  moduleA.io.in_rst := io.in_rst
+  moduleA.io.in_en := io.in_en
+  moduleA.io.in_ready := moduleB.io.out_ready
+
+  moduleB.io.in_rst := io.in_rst
+  moduleB.io.in_en := io.in_en
+  moduleB.io.in_bits := moduleA.io.out_bits  
+  moduleB.io.in_valid := moduleA.io.out_valid  
+
+  //chisel3.assert(moduleB.io.out === 1.U) // 添加断言
+}
+
+class Test extends AnyFlatSpec with ChiselScalatestTester {
+  "Top" should "work" in {
+    test(new MyTest).withAnnotations(Seq(simulator.VerilatorBackendAnnotation)) { c => 
+      c.io.in_rst.poke(true.B)
+      c.clock.step(1)
+
+      c.io.in_rst.poke(false.B)
+      c.io.in_en.poke(true.B)
+      c.clock.step(40)
+
+    }
+    /*
+    test (new HashTable(3, 10))
+      .withAnnotations(Seq(simulator.VerilatorBackendAnnotation)) { c => 
+      c.io.in_rst.poke(true.B)
+      c.clock.step(1)
+      c.io.out_ready.expect(true.B)
+
+      c.io.in_rst.poke(false.B)
+      c.io.in_en.poke(false.B)
+      c.clock.step(1)
+      c.io.out_ready.expect(false.B)
+
+      c.io.in_en.poke(true.B)
+      c.io.in_bits.poke(9.U)
+      c.io.in_valid.poke(true.B)
+      c.clock.step(1)
+      c.io.out_ready.expect(true.B)
+
+      c.io.in_bits.poke(16.U)
+      c.clock.step(1)
+      c.io.out_ready.expect(true.B)
+      
+      c.io.in_bits.poke(17.U)
+      c.clock.step(1)
+      c.io.out_ready.expect(false.B)
+
+      c.io.in_bits.poke(18.U)
+      c.clock.step(1)
+      c.io.out_ready.expect(true.B)
+
+      c.io.in_bits.poke(73.U)
+      c.clock.step(1)
+      c.io.out_ready.expect(false.B)
+
+      c.io.in_bits.poke(32.U)
+      c.clock.step(1)
+      c.io.out_ready.expect(false.B)
+
+      c.clock.step(1)
+      c.io.out_ready.expect(true.B)
+      
+      c.clock.step(1)
+      c.io.out_ready.expect(false.B)
+
+      c.io.in_bits.poke(5.U)
+      c.clock.step(1)
+      c.io.out_ready.expect(true.B)
+      
+      c.clock.step(1)
+      c.io.out_ready.expect(true.B)
+    }
+    */
+    /*
+    test(new DataSource(16, Array(100,2,37,42,5)))
       .withAnnotations(Seq(simulator.VerilatorBackendAnnotation)) { c =>
-        // check initialize
-        c.io.out_value.expect(0.U)
-        c.io.out_valid.expect(0.U)
-
-        // add
-        c.io.in_op.poke(Op.add)
-        c.io.in_key.poke(20.U)
-        c.io.in_value.poke(5.U)
+        c.io.in_rst.poke(true.B)
+        c.io.in_en.poke(false.B)
+        c.io.in_ready.poke(false.B)
         c.clock.step(1)
-        c.io.out_valid.expect(1.U)
-        c.io.out_value.expect(0.U)
+        c.io.out_bits.expect(100.U)
+        c.io.out_valid.expect(true.B)
+
+        c.io.in_rst.poke(false.B)
+        c.io.in_en.poke(true.B)
+        c.clock.step(1)
+        c.io.out_bits.expect(100.U)
+        c.io.out_valid.expect(true.B)
+
+        c.io.in_en.poke(false.B)
+        c.clock.step(1)
+        c.io.out_valid.expect(false.B)
+
+        c.io.in_en.poke(true.B)
+        c.clock.step(1)
+        c.io.out_bits.expect(100.U)
+        c.io.out_valid.expect(true.B)
+
+        c.io.in_ready.poke(true.B)
+        c.clock.step(1)
+        c.io.out_bits.expect(2.U)
+        c.io.out_valid.expect(true.B)
+
+        c.io.in_en.poke(false.B)
+        c.clock.step(1)
+        c.io.out_valid.expect(false.B)
+
+        c.io.in_en.poke(true.B)
+        c.clock.step(1)
+        c.io.out_bits.expect(37.U)
+        c.io.out_valid.expect(true.B)
+
+        c.io.in_ready.poke(false.B)
+        c.clock.step(1)
+        c.io.out_bits.expect(37.U)
+        c.io.out_valid.expect(true.B)
+
+        c.clock.step(1)
+        c.io.out_bits.expect(37.U)
+        c.io.out_valid.expect(true.B)
+
+        c.io.in_ready.poke(true.B)
+        c.clock.step(1)
+        c.io.out_bits.expect(42.U)
+        c.io.out_valid.expect(true.B)
+
+        c.clock.step(1)
+        c.io.out_bits.expect(5.U)
+        c.io.out_valid.expect(true.B)
         
-        c.clock.step(1) // add twice
-        c.io.out_valid.expect(0.U)
-        c.io.out_value.expect(0.U)
-
-        c.io.in_key.poke(20.U) // add different value
-        c.io.in_value.poke(6.U)
         c.clock.step(1)
-        c.io.out_valid.expect(0.U)
-
-        // get
-        c.io.in_op.poke(Op.get)
-        c.io.in_key.poke(20.U)
-        c.clock.step(1)
-        c.io.out_value.expect(5.U)
-        c.io.out_valid.expect(1.U)
-
-        c.io.in_key.poke(20.U)
-        c.clock.step(1)
-        c.io.out_value.expect(5.U)
-        c.io.out_valid.expect(1.U)
-
-        c.io.in_key.poke(1.U) // get not stored value
-        c.io.out_value.expect(5.U)
-        c.clock.step(1)
-        c.io.out_value.expect(0.U)
-        c.io.out_valid.expect(0.U)
-
-        // remove
-        c.io.in_op.poke(Op.rem)
-        c.io.in_key.poke(7.U) // remove not stored value
-        c.clock.step(1)
-        c.io.out_valid.expect(0.U)
-
-        c.io.in_op.poke(Op.get)
-        c.io.in_key.poke(20.U)
-        c.clock.step(1)
-        c.io.out_valid.expect(1.U)
-
-        c.io.in_op.poke(Op.rem)
-        c.io.in_key.poke(20.U)
-        c.clock.step(1)
-        c.io.out_valid.expect(1.U)
-
-        c.io.in_op.poke(Op.get)
-        c.clock.step(1)
-        c.io.out_valid.expect(0.U) // removed
+        //c.io.out_bits.expect(5.U)
+        c.io.out_valid.expect(false.B)
+        
       }
+    */
   }
 }
