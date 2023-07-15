@@ -43,13 +43,13 @@ class HashTable(logSize: Int, width: Int, keyWidth: Int) extends Module {
   val state = RegInit(State.idle)
   val outReadyReg = RegInit(false.B)
   io.out_ready := outReadyReg
+  //io.out_ready := state === State.idle
   val outBitsReg = RegInit(0.U(width.W))
   io.out_bits := outBitsReg
   val outValidReg = RegInit(false.B)
   io.out_valid := outValidReg
   val outFoundReg = RegInit(false.B)
   io.out_found := outFoundReg
-  // io.out_ready := state === State.add
 
   when(io.in_rst) {
     for (i <- 0 until (math.pow(2, logSize + 1).toInt)) {
@@ -70,6 +70,7 @@ class HashTable(logSize: Int, width: Int, keyWidth: Int) extends Module {
       when(io.in_valid) {
         val addr = io.in_bits(logSize - 1, 0)
         when(io.in_op === 0.U) { // add
+          outValidReg := false.B
           when(allocPtrReg(logSize) === 1.U) {
             when(~tagRegs(addr)) {
               dataRegs(addr) := io.in_bits
@@ -83,9 +84,7 @@ class HashTable(logSize: Int, width: Int, keyWidth: Int) extends Module {
               printf(p"table address ${addr} is occupied!\n")
               outReadyReg := false.B
             }
-          }.otherwise {
-            outReadyReg := false.B
-          }
+          }.otherwise {} // add nothing if table is full
         }.elsewhen(io.in_op === 1.U) { // get
           when(tagRegs(addr)) {
             when(
@@ -100,6 +99,7 @@ class HashTable(logSize: Int, width: Int, keyWidth: Int) extends Module {
               bitsReg := io.in_bits
               nextPtrReg := nextRegs(addr)
               printf(p"table address ${addr} not found!\n")
+              outValidReg := false.B
               outReadyReg := false.B
             }.otherwise {
               outFoundReg := false.B
@@ -112,6 +112,7 @@ class HashTable(logSize: Int, width: Int, keyWidth: Int) extends Module {
           }
         }
       }.otherwise {
+        outValidReg := false.B
         outReadyReg := true.B
       }
     }.elsewhen(state === State.addSearch) {
@@ -146,11 +147,16 @@ class HashTable(logSize: Int, width: Int, keyWidth: Int) extends Module {
         outReadyReg := true.B
       }
     }
-    for(i <- (0 until (math.pow(2, logSize + 1).toInt))) {
-        printf(p"${dataRegs(i)} ")
+    for (i <- (0 until (math.pow(2, logSize).toInt))) {
+      printf(p"${dataRegs(i)} ")
     }
     printf("\n")
-    printf("------\n")
+    for (
+      i <- ((math.pow(2, logSize).toInt) until (math.pow(2, logSize + 1).toInt))
+    ) {
+      printf(p"${dataRegs(i)} ")
+    }
+    printf("\n------\n")
   }
 
 }

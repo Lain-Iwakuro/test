@@ -19,23 +19,24 @@ class DataSource(width: Int, data: Array[Int]) extends Module {
   val outValidReg = RegInit(false.B)
   io.out_valid := outValidReg
   val ptrReg = RegInit(
-    data.length.U(log2Ceil(data.length + 1).W)
+    1.U(log2Ceil(data.length + 1).W)
   ) // can represent length
 
   when(io.in_rst) {
     outBitsReg := dataRegs(0)
     outValidReg := true.B
     ptrReg := 1.U(log2Ceil(data.length + 1).W)
+    printf("RESET!!\n")
   }.otherwise {
     outValidReg := io.in_en && (ptrReg < data.length.U || ~io.in_ready)
     when(io.in_en) {
       when(io.in_ready && ptrReg < data.length.U) {
         outBitsReg := dataRegs(ptrReg)
-        ptrReg := ptrReg +& 1.U(log2Ceil(data.length + 1).W)
+        ptrReg := ptrReg + 1.U(log2Ceil(data.length + 1).W)
       }
       //printf(p"ptrReg = ${ptrReg}\n")
       //printf(p"dataRegs(ptrReg) = ${dataRegs(ptrReg)}\n")
-      printf(p"data out_bits = ${io.out_bits}, out_valid = ${io.out_valid}\n")
+      printf(p"data out_bits = ${io.out_bits}, out_valid = ${io.out_valid}, ptrReg = ${ptrReg}\n")
     }
   }
   
