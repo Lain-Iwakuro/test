@@ -29,17 +29,20 @@ class MyTest extends Module {
   val moduleB = Module(new HashTable(4, 8, 6))
   val moduleC = Module(new DataSource(1, Array(0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0)))
 
-  moduleA.io.in_rst := io.in_rst
-  moduleA.io.in_en := io.in_en
+  val rstReg = RegNext(io.in_rst, false.B)
+  val enReg = RegNext(io.in_en, false.B)
+  
+  moduleA.io.in_rst := rstReg
+  moduleA.io.in_en := enReg
   moduleA.io.in_ready := moduleB.io.out_ready
 
-  moduleB.io.in_rst := io.in_rst
+  moduleB.io.in_rst := rstReg
   moduleB.io.in_op := moduleC.io.out_bits
   moduleB.io.in_bits := moduleA.io.out_bits  
   moduleB.io.in_valid := moduleA.io.out_valid //&& moduleC.io.out_valid
 
-  moduleC.io.in_rst := io.in_rst
-  moduleC.io.in_en := io.in_en
+  moduleC.io.in_rst := rstReg
+  moduleC.io.in_en := enReg
   moduleC.io.in_ready := moduleB.io.out_ready
 
 }
